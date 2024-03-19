@@ -26,7 +26,7 @@ def validate_username():
 
     result = user_service.validateUsername(username)
 
-    if result is False:
+    if result is True:
         return jsonify({'result': 'success', 'msg': '사용할 수 있는 닉네임입니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '이미 존재하는 닉네임입니다!'})
@@ -38,7 +38,7 @@ def validate_userid():
     
     result = user_service.validateUserId(user_id)
 
-    if result is False:
+    if result is True:
         return jsonify({'result': 'success', 'msg': '사용할 수 있는 아이디입니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '이미 존재하는 아이디입니다.'})
