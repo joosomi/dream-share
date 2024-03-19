@@ -7,6 +7,6 @@ def sign_up(given_user):
     user = dict()
     user['id_receive'] = given_user['id_give']
     user['pw_receive'] = pw_hash
-    user['user_name_receive'] = given_user['user_name_receive']
+    user['username_receive'] = given_user['username_receive']
 
-    result = user_repository.register(user)
+    return user_repository.register(user)
