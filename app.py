@@ -9,9 +9,10 @@ app = Flask(__name__)
 @app.route('/user/sign-up', methods=['POST'])
 def api_register():
     user = dict()
-    user['id_receive'] = request.form['id_give']
-    user['pw_receive'] = request.form['pw_give']
-    user['username_receive'] = request.form['username']
+    params = request.get_json()
+    user['id_receive'] = params['id_give']
+    user['pw_receive'] = params['pw_give']
+    user['username_receive'] = params['username']
 
     result = user_service.sign_up(user)
 
@@ -42,6 +43,34 @@ def validate_userid():
         return jsonify({'result': 'success', 'msg': '사용할 수 있는 아이디입니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '이미 존재하는 아이디입니다.'})
+
+
+# 로그인
+@app.route('/user/login', methods=['POST'])
+def login():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    login_form = dict()
+    login_form['id_receive'] = request.form['id_give']
+    login_form['pw_receive'] = request.form['pw_give']
+
+    user_service.login(login_form)
+
+    # 찾으면 JWT 토큰을 만들어 발급합니다.
+    if result is not None:
+        # JWT 토큰 생성
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=100)
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+
+        # token을 줍니다.
+        return jsonify({'result': 'success', 'token': token})
+    # 찾지 못하면
+    else:
+        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
 @app.route('/')

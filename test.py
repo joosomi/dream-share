@@ -13,4 +13,21 @@ def usernameValidateTest():
     else:
         print("비 중복케이스 실패ㅜ")
 
+
+def loginTest():
+    id = "test_id"
+    pw = "testpassword123!"
+    login_form = dict()
+    login_form["id_receive"] = id
+    login_form["pw_receive"] = pw
+    user_service.login()
+    if result1 is False:
+        print("중복케이스 성공")
+    else:
+        print("중복케이스 실패ㅜ")
+
+    if result2 is True:
+        print("비 중복케이스 성공")
+    else:
+        print("비 중복케이스 실패ㅜ")
 usernameValidateTest()

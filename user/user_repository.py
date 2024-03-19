@@ -16,3 +16,8 @@ def usernameIsExist(username):
 
 def userIdIsExist(user_id):
     return db.user.find_one({'user_id': user_id})
+
+def login_check(login_form):
+    id_receive = login_form['id_receive']
+    pw_receive = login_form['pw_receive']
+    return db.user.find_one({'user_id': id_receive, 'password': pw_receive})
