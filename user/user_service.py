@@ -17,3 +17,10 @@ def validateUsername(username):
         return False
     else:
         return True
+
+def validateUserId(user_id):
+    result = user_repository.userIdIsExist(user_id)
+    if result is not None:
+        return False
+    else: 
+        return True
