@@ -5,7 +5,7 @@ db = client.dbdreamshare
 def register(user):
     doc = {
         'user_id': user['id_receive'],
-        'user_name': user['user_name_receive'],
+        'username': user['username_receive'],
         'password': user['pw_receive'],
         'ntfct_count': 0,
     }

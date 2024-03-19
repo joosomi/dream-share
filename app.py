@@ -11,7 +11,7 @@ def api_register():
     user = dict()
     user['id_receive'] = request.form['id_give']
     user['pw_receive'] = request.form['pw_give']
-    user['user_name_receive'] = request.form['user_name']
+    user['username_receive'] = request.form['username']
 
     result = user_service.sign_up(user)
 
@@ -19,8 +19,6 @@ def api_register():
         return jsonify({'result': 'success', 'msg': '회원가입이 완료되었습니다.'})
     else:
         return jsonify({'result': 'fail'})
-
-
 
 
 @app.route('/')
