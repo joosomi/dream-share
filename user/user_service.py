@@ -31,16 +31,17 @@ def validateUserId(user_id):
         return True
 
 def login(given_login_form):
+    id_receive = given_login_form["id_receive"]
     pw_receive = given_login_form["pw_receive"]
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     login_form = dict()
 
-    login_form['id_receive'] = given_login_form["id_receive"]
+    login_form['id_receive'] = id_receive
     login_form['pw_receive'] = pw_hash
     result = user_repository.login_check(login_form)
     
     if result is not None:
-        return security_service.issueToken(result)
+        return security_service.issueToken(id_receive)
     else:
         return False

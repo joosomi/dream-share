@@ -48,17 +48,16 @@ def validate_userid():
 # 로그인
 @app.route('/user/login', methods=['POST'])
 def login():
-    id_receive = request.form['id_give']
-    pw_receive = request.form['pw_give']
+    user = dict()
+    params = request.get_json()
+    user['id_receive'] = params['id_give']
+    user['pw_receive'] = params['pw_give']
 
-    login_form = dict()
-    login_form['id_receive'] = request.form['id_give']
-    login_form['pw_receive'] = request.form['pw_give']
+    token = user_service.login(user)
 
-    result = user_service.login(login_form)
-    if result is False:
+    if token is False:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-    else : return jsonify({'result': 'success', 'token': result})
+    else : return jsonify({'result': 'success', 'token': token})
 
 
 @app.route('/')
