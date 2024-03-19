@@ -13,3 +13,6 @@ def register(user):
 
 def usernameIsExist(username):
     return db.user.find_one({'username': username})
+
+def userIdIsExist(user_id):
+    return db.user.find_one({'user_id': user_id})
