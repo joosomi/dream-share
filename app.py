@@ -20,6 +20,16 @@ def api_register():
     else:
         return jsonify({'result': 'fail'})
 
+@app.route('/user/username/validate', methods=['GET'])
+def api_register():
+    username= request.form['username']
+
+    result = user_service.validateUsername(username)
+
+    if result is True:
+        return jsonify({'result': 'success', 'msg': '사용할 수 있는 닉네임입니다.'})
+    else:
+        return jsonify({'result': 'fail', 'msg': '이미 존재하는 닉네임입니다!'})
 
 @app.route('/')
 def home():

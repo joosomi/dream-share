@@ -10,3 +10,6 @@ def register(user):
         'ntfct_count': 0,
     }
     return db.user.insert_one(doc)
+
+def usernameIsExist(username):
+    return db.user.find_one({'username': username})
