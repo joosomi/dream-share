@@ -55,22 +55,10 @@ def login():
     login_form['id_receive'] = request.form['id_give']
     login_form['pw_receive'] = request.form['pw_give']
 
-    user_service.login(login_form)
-
-    # 찾으면 JWT 토큰을 만들어 발급합니다.
-    if result is not None:
-        # JWT 토큰 생성
-        payload = {
-            'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=100)
-        }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
-
-        # token을 줍니다.
-        return jsonify({'result': 'success', 'token': token})
-    # 찾지 못하면
-    else:
+    result = user_service.login(login_form)
+    if result is False:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+    else : return jsonify({'result': 'success', 'token': result})
 
 
 @app.route('/')

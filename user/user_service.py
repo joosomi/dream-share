@@ -1,4 +1,5 @@
 import hashlib
+from security import security_service
 from user import user_repository
 
 def sign_up(given_user):
@@ -38,4 +39,8 @@ def login(given_login_form):
     login_form['id_receive'] = given_login_form["id_receive"]
     login_form['pw_receive'] = pw_hash
     result = user_repository.login_check(login_form)
-    print(result)
+    
+    if result is not None:
+        return security_service.issueToken(result)
+    else:
+        return False
