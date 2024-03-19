@@ -22,7 +22,7 @@ def api_register():
 
 @app.route('/user/username/validate', methods=['GET'])
 def api_register():
-    username= request.form['username']
+    username= request.args.get('username')
 
     result = user_service.validateUsername(username)
 
