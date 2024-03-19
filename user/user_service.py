@@ -10,3 +10,10 @@ def sign_up(given_user):
     user['username_receive'] = given_user['username_receive']
 
     return user_repository.register(user)
+
+def validateUsername(username):
+    result = user_repository.usernameIsExist(username)
+    if result is not None:
+        return False
+    else:
+        return True
