@@ -1,5 +1,5 @@
 import hashlib
-import user_repository
+from user import user_repository
 
 def sign_up(given_user):
     pw_receive = given_user['pw_receive']
