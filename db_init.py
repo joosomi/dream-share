@@ -14,10 +14,19 @@ def insert_all():
     }
     return db.user.insert_one(doc)
 
+def insert_board():
+    post = {
+        'owner_id': 'hello',
+        'category': 0,
+        'content': 'hi',
+        'location':'dorm',
+        'user_id': 'test_id',
+        'status': 0
+    }
+    return db.board.insert_one(post)
 
 if __name__ == '__main__':
-    # 기존의 movies 콜렉션을 삭제하기
     db.user.drop()
 
-    # 영화 사이트를 scraping 해서 db 에 채우기
 insert_all()
+insert_board()
