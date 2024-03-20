@@ -13,3 +13,10 @@ def write_a_resv(given_resv):
         return True
     else: 
         return False
+
+def get_reservation_list(board_id):
+    result = reservation_repository.get_resv_list_by_board_id(board_id)
+    if result is not None:
+        return result
+    else:
+        return None
