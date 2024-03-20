@@ -140,19 +140,35 @@ def api_write_post_page():
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
 
-#게시글 status update 미완 - 하는중
-# @app.route('/board/edit', methods=['POST'])
-# def api_edit_post():
-#     post_id= request.args.get('id')
+#게시글 수정 - status update 
+@app.route('/board/update_status', methods=['POST'])
+def api_update_post_status():
+    receive_token = request.cookies.get('access-token') 
+    token_validation_result = security_service.validateToken(receive_token)
+
+    # 유효하지 않은 토큰인 경우 처리
+    if not token_validation_result["result"]:
+        return jsonify({"result": "fail", "msg": token_validation_result["msg"] })
+
+    # 유효한 토큰인 경우 사용자 ID 가져오기
+    current_user_id = token_validation_result['data']
+    print(current_user_id)
+    return current_user_id
+    # post["post_id"] = post["post_id"]
+    # post["status"]= post["status"]
+    
+
+    # result = board_service.edit_a_post(post)
 
 
-#게시글 삭제 - 거래 완료 버튼 - 미완
+#게시글 삭제 - 거래 완료 버튼 누르는 경우
 @app.route('/board/delete', methods=["POST"])
 def api_delete_post():
     post = request.get_json()
     post_id = post["post_id"]
 
     result = board_service.delete_a_post(post_id)
+    
     if result is True:
         return jsonify({'result': 'success', 'msg': '게시글 삭제가 완료되었습니다.'})
     else:
