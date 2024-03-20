@@ -20,7 +20,7 @@ def insert_board():
         'category': 0,
         'content': 'hi',
         'location':'dorm',
-        'user_id': 'test_id',
+        'owner_id': 'test_id',
         'status': 0
     }
     return db.board.insert_one(post)
