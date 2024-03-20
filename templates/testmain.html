@@ -119,24 +119,6 @@
     </style>
 
     <script>
-        $(document).ready(function () {
-            getPostList()
-        });
-        function getPostList() {
-            $.ajax({
-                type: "GET",
-                url: "/board",
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        let posts = response['data']
-                        console.log(response)
-                        console.log(posts)
-                    } else {
-                        alert('게시글이 존재하지 않습니다.')
-                    }
-                }
-            });
-        }
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("openPopup").addEventListener("click", function () {
                 var popup = document.getElementById("popup");
@@ -161,16 +143,17 @@
                 </thead>
 
                 <tbody>
+                    {% for post in posts %}
                     <tr>
-                        <td>나눔</td>
-                        <td>경기도 수원캠퍼스</td>
-                        <td>젤리 나눠요</td>
+                        {% for value in post %}
+                            <td>{{value}}</td>
+                        {% endfor %}
                         <td><button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-                                style="background-color: darkgray; border-color: darkgray;">
-                                예약 완료
-                            </button>
+                            style="background-color: darkgray; border-color: darkgray;">
+                            예약</button>
                         </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
 
 

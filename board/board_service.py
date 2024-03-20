@@ -4,8 +4,16 @@ from bson import ObjectId
 #전체 게시글 가져오기 
 def get_all_posts():
     posts = board_repository.get_posts()
-    if posts is not None:
-        return posts
+    result = list()
+    for post in posts:
+        data = list()
+        data.append(post['category'])
+        data.append(post['location'])
+        data.append(post['content'])
+        data.append(post['status'])
+        result.append(data)
+    if result is not None:
+        return result
     else:
         return None
 

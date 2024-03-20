@@ -33,9 +33,9 @@ def delete_post(post_id):
     return result.deleted_count
 
 def update_status_1(post_id):
-    result = db.board.update_one({'_id' : post_id}, {'$set' : {'status' : '1'}})
+    result = db.board.update_one({'_id' : post_id}, {'$set' : {'status' : '예약중'}})
     return
 
 def update_status_2(post_id):
-    result = db.board.update_one({'_id' : post_id}, {'$set' : {'status' : '2'}})
+    result = db.board.update_one({'_id' : post_id}, {'$set' : {'status' : '예약 완료'}})
     return

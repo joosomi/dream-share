@@ -2,7 +2,7 @@ from user import user_service
 from board import board_service
 from security import security_service
 from reservation import reservation_service
-from flask import Flask, jsonify ,request, render_template, redirect, url_for
+from flask import Flask, jsonify ,request, render_template, redirect, url_for, make_response
 from flask_cors import CORS
 
 
@@ -16,17 +16,9 @@ def render_home():
 
 @app.route('/main')
 def render_main():
-    #쿠키에서 저장된 토큰 받아오기 
-    receive_token = request.cookies.get('access-token') 
-    #토큰 유효성 검사 
-    given_token = security_service.validateToken(receive_token)
-    print(given_token)
-    if given_token["result"]:
-        return redirect(url_for('render_login'))
-    else:
-        return render_template('testmain.html')
-        
 
+    result = board_service.get_all_posts()
+    return render_template('testmain.html', posts = result)
 
 @app.route('/user/login')
 def render_login():
@@ -36,10 +28,10 @@ def render_login():
     given_token = security_service.validateToken(receive_token)
     print(given_token)
     if given_token["result"]:
-        return jsonify({'result':  given_token['data'] })
+        return redirect(url_for('render_main'))
     else:
-        return redirect(url_for('render_home'))
-
+        return render_template('testlogin.html')
+    
 @app.route('/user/sign-up')
 def render_signup():
     return render_template('testsignup.html')
@@ -99,7 +91,10 @@ def login():
 
     if token is False:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-    else : return jsonify({'result': 'success', 'token': token})
+    else : 
+        resp = make_response(jsonify({'result': 'success'}))
+        resp.set_cookie('access-token', token, samesite='None', secure=True)
+        return resp
 
 
 #토큰 유효성 확인 - 수정 필요 미완성
@@ -119,14 +114,6 @@ def validate_token():
 
 # ========================= board controller =========================
 #전체 게시글 가져오기 
-@app.route('/board', methods=['GET'])
-def api_get_posts():
-    result = board_service.get_all_posts()
-
-    if result:
-        return jsonify({'result': 'success', 'data': result})
-    else:
-        return jsonify({'msg': '게시글이 존재하지 않습니다.'})
 
 #특정 게시글 가져오기 
 @app.route('/article', methods=['GET'])
@@ -154,7 +141,7 @@ def api_write_post_page():
     post_receive['category'] = params['category']
     post_receive['content'] = params['content']
     post_receive['location'] = params['location']
-    post_receive['status'] = params['status']
+    post_receive['status'] = "예약 없음"
 
     result = board_service.write_a_post(post_receive)
 
