@@ -7,6 +7,7 @@ def get_posts():
     posts = list(db.board.find())
     for post in posts:
         post['_id'] = str(post['_id'])
+        post['owner_id'] = str(post['owner_id'])
 
     return posts
 
