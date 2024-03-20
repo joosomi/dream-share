@@ -21,5 +21,13 @@ def write_post(post):
 
 
 #게시글 수정
+# def edit_post(post_id):    
+#     post = db.board.update_one({'_id': post_id})
 
+
+    
 #게시글 삭제
+def delete_post(post_id):
+    post = db.board.delete_one({'_id': post_id})
+
+    return post
