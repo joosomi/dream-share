@@ -13,6 +13,7 @@ CORS(app)
 def render_home():
     return render_template('index.html')
 
+
 @app.route('/user/login')
 def render_login():
     return render_template('testlogin.html')
@@ -20,6 +21,7 @@ def render_login():
 @app.route('/user/sign-up')
 def render_signup():
     return render_template('testsignup.html')
+
 
 # ========================= user controller =========================
 
@@ -143,15 +145,6 @@ def api_write_post_page():
 
 #게시글 삭제
 
-
-
-@app.route('/login')
-def login_page():
-    return render_template('testlogin.html')
-
-@app.route('/sign-up')
-def sign_up_page():
-    return render_template('testsignup.html')
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)
