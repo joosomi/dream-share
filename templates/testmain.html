@@ -143,16 +143,17 @@
                 </thead>
 
                 <tbody>
+                    {% for post in posts %}
                     <tr>
-                        <td>나눔</td>
-                        <td>경기도 수원캠퍼스</td>
-                        <td>젤리 나눠요</td>
+                        {% for value in post %}
+                            <td>{{value}}</td>
+                        {% endfor %}
                         <td><button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-                                style="background-color: darkgray; border-color: darkgray;">
-                                예약 완료
-                            </button>
+                            style="background-color: darkgray; border-color: darkgray;">
+                            예약</button>
                         </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
 
 

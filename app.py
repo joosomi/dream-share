@@ -2,7 +2,7 @@ from user import user_service
 from board import board_service
 from security import security_service
 from reservation import reservation_service
-from flask import Flask, jsonify ,request, render_template, redirect, url_for
+from flask import Flask, jsonify ,request, render_template, redirect, url_for, make_response
 from flask_cors import CORS
 
 
@@ -18,7 +18,6 @@ def render_home():
 def render_main():
 
     result = board_service.get_all_posts()
-
     return render_template('testmain.html', posts = result)
 
 @app.route('/user/login')
@@ -92,7 +91,10 @@ def login():
 
     if token is False:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-    else : return jsonify({'result': 'success', 'token': token})
+    else : 
+        resp = make_response(jsonify({'result': 'success'}))
+        resp.set_cookie('access-token', token, samesite='None', secure=True)
+        return resp
 
 
 #토큰 유효성 확인 - 수정 필요 미완성
@@ -139,7 +141,7 @@ def api_write_post_page():
     post_receive['category'] = params['category']
     post_receive['content'] = params['content']
     post_receive['location'] = params['location']
-    post_receive['status'] = params['status']
+    post_receive['status'] = "예약 없음"
 
     result = board_service.write_a_post(post_receive)
 
