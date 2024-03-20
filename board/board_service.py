@@ -32,19 +32,19 @@ def write_a_post(given_post):
         return False
 
 
-#게시글 수정
-# def edit_a_post(post_id):
-#     id = ObjectId(post_id)
-#     post = board_repository.getpost(id)
-
+# #게시글 수정
+# def edit_a_post(post):
+#     post["post_id"] = (ObjectId(post["post_id"]))
+    
+#     edited_result = board_repository.edit_post(post)
 
 
 #게시글 삭제
 def delete_a_post(post_id):
     id = (ObjectId(post_id))
-    result = board_repository.delete_post(id)
-
-    if result ==1:
+    deleted_count= board_repository.delete_post(id)
+    
+    if deleted_count>0:
         return True
     else: 
         return False
