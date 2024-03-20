@@ -176,27 +176,25 @@ def api_delete_post():
 @app.route('/reservation/write', methods=['POST'])
 def api_write_a_resv():
     receive_token = request.cookies.get('access-token')
-    user = security_service.validateToken(receive_token)
-    user_id = user['_id']
+    user = security_service.getIdWithValidation(receive_token)
     post_id= request.args.get('id')
     
     resv_receive = dict()
     params = request.get_json()
 
-    resv_receive['user_id'] = user_id
+    resv_receive['user_id'] = user['id']
     resv_receive['post_id'] = post_id
-    resv_receive['contect_infomation'] = params['contect_infomation']
-    resv_receive['status'] = params['status']
-
+    resv_receive['contact-information'] = params['contect_infomation']
+    resv_receive['status'] = 0
 
     result = reservation_service.write_a_resv(resv_receive)
 
     if result is True:
+        board_service.change_status_to_1(post_id)
         return jsonify({'result': 'success', 'msg': '예약신청이 완료되었습니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
     
-
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)

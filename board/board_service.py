@@ -48,3 +48,9 @@ def delete_a_post(post_id):
         return True
     else: 
         return False
+    
+#status 변경 : 예약
+def change_status_to_1(post_id):
+    id = ObjectId(post_id)
+    board_repository.update_status_1(id)
+#status 변경 : 예약 완료
