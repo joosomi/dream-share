@@ -1,5 +1,5 @@
 from user import user_service
-from flask import Flask, jsonify ,request
+from flask import Flask, jsonify ,request, render_template
 
 app = Flask(__name__)
 
@@ -60,9 +60,13 @@ def login():
     else : return jsonify({'result': 'success', 'token': token})
 
 
-@app.route('/')
-def home():
-   return 'This is Home!'
+@app.route('/login')
+def login_page():
+    return render_template('testlogin.html')
+
+@app.route('/sign-up')
+def sign_up_page():
+    return render_template('testsignup.html')
 
 if __name__ == '__main__':  
-   app.run('0.0.0.0',port=5001,debug=True)
+    app.run('0.0.0.0',port=5001,debug=True)
