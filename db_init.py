@@ -29,9 +29,9 @@ def insert_reservation():
     post = {
         'user_id': 'test_id',
         'post_id': '65fa8d2007afa26f216ca718',
-        'contect_infomaion': '010-0000-0000',
+        'contact-information': '010-0000-0000',
         'status': 1,
-        'rgstr_date-time': '2025-07-23 00:00:00',
+        'rgstr_date_time': '2025-07-23 00:00:00',
     }
     return db.reservation.insert_one(post)
 if __name__ == '__main__':
