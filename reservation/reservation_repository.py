@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from bson import ObjectId
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@3.36.87.209', 27017)
 db = client.dbdreamshare
 
 def write_resv(resv):

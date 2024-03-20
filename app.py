@@ -93,7 +93,8 @@ def login():
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
     else : 
         resp = make_response(jsonify({'result': 'success'}))
-        resp.set_cookie('access-token', token, samesite='None', secure=True)
+        resp.set_cookie('access-token', token.decode('utf-8'), samesite=None)
+
         return resp
 
 
