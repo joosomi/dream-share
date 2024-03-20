@@ -119,24 +119,6 @@
     </style>
 
     <script>
-        $(document).ready(function () {
-            getPostList()
-        });
-        function getPostList() {
-            $.ajax({
-                type: "GET",
-                url: "/board",
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        let posts = response['data']
-                        console.log(response)
-                        console.log(posts)
-                    } else {
-                        alert('게시글이 존재하지 않습니다.')
-                    }
-                }
-            });
-        }
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("openPopup").addEventListener("click", function () {
                 var popup = document.getElementById("popup");

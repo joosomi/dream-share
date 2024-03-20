@@ -16,17 +16,10 @@ def render_home():
 
 @app.route('/main')
 def render_main():
-    #쿠키에서 저장된 토큰 받아오기 
-    receive_token = request.cookies.get('access-token') 
-    #토큰 유효성 검사 
-    given_token = security_service.validateToken(receive_token)
-    print(given_token)
-    if given_token["result"]:
-        return redirect(url_for('render_login'))
-    else:
-        return render_template('testmain.html')
-        
 
+    result = board_service.get_all_posts()
+
+    return render_template('testmain.html', posts = result)
 
 @app.route('/user/login')
 def render_login():
@@ -36,10 +29,10 @@ def render_login():
     given_token = security_service.validateToken(receive_token)
     print(given_token)
     if given_token["result"]:
-        return jsonify({'result':  given_token['data'] })
+        return redirect(url_for('render_main'))
     else:
-        return redirect(url_for('render_home'))
-
+        return render_template('testlogin.html')
+    
 @app.route('/user/sign-up')
 def render_signup():
     return render_template('testsignup.html')
@@ -119,14 +112,6 @@ def validate_token():
 
 # ========================= board controller =========================
 #전체 게시글 가져오기 
-@app.route('/board', methods=['GET'])
-def api_get_posts():
-    result = board_service.get_all_posts()
-
-    if result:
-        return jsonify({'result': 'success', 'data': result})
-    else:
-        return jsonify({'msg': '게시글이 존재하지 않습니다.'})
 
 #특정 게시글 가져오기 
 @app.route('/article', methods=['GET'])
