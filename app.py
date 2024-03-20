@@ -1,7 +1,7 @@
 from user import user_service
 from board import board_service
 from security import security_service
-from flask import Flask, jsonify ,request, render_template
+from flask import Flask, jsonify ,request, render_template, redirect, url_for
 from flask_cors import CORS
 
 
@@ -16,7 +16,15 @@ def render_home():
 
 @app.route('/user/login')
 def render_login():
-    return render_template('testlogin.html')
+    #쿠키에서 저장된 토큰 받아오기 
+    receive_token = request.cookies.get('access-token') 
+    #토큰 유효성 검사 
+    given_token = security_service.validateToken(receive_token)
+    print(given_token)
+    if given_token["result"]:
+        return jsonify({'result':  given_token['data'] })
+    else:
+        return redirect(url_for('render_home'))
 
 @app.route('/user/sign-up')
 def render_signup():
