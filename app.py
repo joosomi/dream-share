@@ -12,7 +12,20 @@ CORS(app)
 
 @app.route('/')
 def render_home():
-    return render_template('index.html')
+    return redirect(url_for('render_main'))
+
+@app.route('/main')
+def render_main():
+    #쿠키에서 저장된 토큰 받아오기 
+    receive_token = request.cookies.get('access-token') 
+    #토큰 유효성 검사 
+    given_token = security_service.validateToken(receive_token)
+    print(given_token)
+    if given_token["result"]:
+        return redirect(url_for('render_login'))
+    else:
+        return render_template('testmain.html')
+        
 
 
 @app.route('/user/login')
@@ -111,7 +124,7 @@ def api_get_posts():
     result = board_service.get_all_posts()
 
     if result:
-        return jsonify({'msg': 'success', 'data': result})
+        return jsonify({'result': 'success', 'data': result})
     else:
         return jsonify({'msg': '게시글이 존재하지 않습니다.'})
 
