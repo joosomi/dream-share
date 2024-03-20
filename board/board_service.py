@@ -26,7 +26,6 @@ def get_a_post(post_id):
 #게시글 쓰기
 def write_a_post(given_post): 
     result = board_repository.write_post(given_post)
-    print(result)
     if result is not None:
         return True
     else: 
@@ -34,5 +33,18 @@ def write_a_post(given_post):
 
 
 #게시글 수정
+# def edit_a_post(post_id):
+#     id = ObjectId(post_id)
+#     post = board_repository.getpost(id)
+
+
 
 #게시글 삭제
+def delete_a_post(post_id):
+    id = (ObjectId(post_id))
+    result = board_repository.delete_post(id)
+
+    if result ==1:
+        return True
+    else: 
+        return False

@@ -129,7 +129,7 @@ def api_write_post_page():
     post_receive['category'] = params['category']
     post_receive['content'] = params['content']
     post_receive['location'] = params['location']
-    post_receive['status'] = params['location']
+    post_receive['status'] = params['status']
     post_receive['user_id'] = params['user_id']
 
 
@@ -140,10 +140,23 @@ def api_write_post_page():
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
 
-#게시글 수정
+#게시글 status update 미완 - 하는중
+# @app.route('/board/edit', methods=['POST'])
+# def api_edit_post():
+#     post_id= request.args.get('id')
 
 
-#게시글 삭제
+#게시글 삭제 - 거래 완료 버튼 - 미완
+@app.route('/board/delete', methods=["POST"])
+def api_delete_post():
+    post = request.get_json()
+    post_id = post["post_id"]
+
+    result = board_service.delete_a_post(post_id)
+    if result is True:
+        return jsonify({'result': 'success', 'msg': '게시글 삭제가 완료되었습니다.'})
+    else:
+        return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
 
 
 if __name__ == '__main__':  
