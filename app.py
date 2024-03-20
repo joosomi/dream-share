@@ -1,7 +1,21 @@
 from user import user_service
-from flask import Flask, jsonify ,request
+from board import board_service
+from flask import Flask, jsonify ,request, render_template
+
 
 app = Flask(__name__)
+
+@app.route('/')
+def render_home():
+    return render_template('index.html')
+
+@app.route('/user/login')
+def render_login():
+    return render_template('login.html')
+
+@app.route('/user/sign-up')
+def render_signup():
+    return render_template('signup.html')
 
 # ========================= user controller =========================
 
@@ -60,9 +74,57 @@ def login():
     else : return jsonify({'result': 'success', 'token': token})
 
 
-@app.route('/')
-def home():
-   return 'This is Home!'
+# ========================= board controller =========================
+#전체 게시글 가져오기 
+@app.route('/board', methods=['GET'])
+def api_get_posts():
+    result = board_service.get_all_posts()
+
+    if result:
+        return jsonify({'msg': 'success', 'data': result})
+    else:
+        return jsonify({'msg': '게시글이 존재하지 않습니다.'})
+
+#특정 게시글 가져오기 
+@app.route('/article', methods=['GET'])
+def api_get_a_post():
+    post_id= request.args.get('id')
+    
+    result = board_service.get_a_post(post_id)
+
+    if result:
+        return jsonify({'result': 'success', 'data': result})
+    else:
+        return jsonify({'result': 'fail', 'msg': '해당 게시글이 존재하지 않습니다. '})
+
+
+#게시글 등록
+@app.route('/board/write', methods=['POST'])
+def api_write_post():
+    post_receive = dict()
+    params = request.get_json()
+
+    post_receive['owner_id'] = params['owner_id']
+    post_receive['category'] = params['category']
+    post_receive['content'] = params['content']
+    post_receive['location'] = params['location']
+    post_receive['status'] = params['location']
+    post_receive['user_id'] = params['user_id']
+
+
+    result = board_service.write_a_post(post_receive)
+
+    if result is True:
+        return jsonify({'result': 'success', 'msg': '게시글 작성이 완료되었습니다.'})
+    else:
+        return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
+
+#게시글 수정
+
+
+#게시글 삭제
+
+
 
 if __name__ == '__main__':  
-   app.run('0.0.0.0',port=5001,debug=True)
+    app.run('0.0.0.0',port=5000,debug=True)
