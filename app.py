@@ -1,20 +1,25 @@
 from user import user_service
 from board import board_service
+from security import security_service
 from flask import Flask, jsonify ,request, render_template
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
+
 
 @app.route('/')
 def render_home():
     return render_template('index.html')
 
-@app.route('/login')
-def login_page():
+
+@app.route('/user/login')
+def render_login():
     return render_template('testlogin.html')
 
-@app.route('/sign-up')
-def sign_up_page():
+@app.route('/user/sign-up')
+def render_signup():
     return render_template('testsignup.html')
 
 
@@ -75,6 +80,20 @@ def login():
     else : return jsonify({'result': 'success', 'token': token})
 
 
+#토큰 유효성 확인 - 수정 필요 미완성
+@app.route('/user/validate', methods=["GET"])
+def validate_token():
+    #쿠키에서 저장된 토큰 받아오기 
+    receive_token = request.cookies.get('access-token') 
+    #토큰 유효성 검사 
+    given_token = security_service.validateToken(receive_token)
+    print(given_token)
+    if given_token["result"]:
+        return jsonify({'result':  given_token['data'] })
+    else:
+        return jsonify({'result': given_token['msg']})
+
+
 
 # ========================= board controller =========================
 #전체 게시글 가져오기 
@@ -102,7 +121,7 @@ def api_get_a_post():
 
 #게시글 등록
 @app.route('/board/write', methods=['POST'])
-def api_write_post():
+def api_write_post_page():
     post_receive = dict()
     params = request.get_json()
 
