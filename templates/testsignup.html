@@ -67,7 +67,7 @@
                 type: "POST",
                 url: "http://127.0.0.1:5001/user/sign-up",
                 data: JSON.stringify(data),
-                contentType : 'application/json; charset=utf-8',
+                contentType: 'application/json; charset=utf-8',
                 success: function (response) {
                     if (response['result'] == 'success') {
                         alert('회원가입이 완료되었습니다.');
