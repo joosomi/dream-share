@@ -74,6 +74,7 @@ def login():
     else : return jsonify({'result': 'success', 'token': token})
 
 
+
 # ========================= board controller =========================
 #전체 게시글 가져오기 
 @app.route('/board', methods=['GET'])
@@ -126,5 +127,13 @@ def api_write_post():
 
 
 
+@app.route('/login')
+def login_page():
+    return render_template('testlogin.html')
+
+@app.route('/sign-up')
+def sign_up_page():
+    return render_template('testsignup.html')
+
 if __name__ == '__main__':  
-    app.run('0.0.0.0',port=5000,debug=True)
+    app.run('0.0.0.0',port=5001,debug=True)
