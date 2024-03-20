@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import os
 import jwt
 from user import user_repository
+from board import board_repository
+from bson import ObjectId 
 
 load_dotenv()
 
@@ -37,3 +39,12 @@ def validateToken(receive_token):
         return  {"result": False, "msg":"로그인 시간이 만료되었습니다."}
     except jwt.exceptions.DecodeError:
         return  {"result": False, "msg":"로그인 정보가 존재하지 않습니다."}
+    
+def is_authorized(post_user_set):
+    post_id = ObjectId(post_user_set['post_id'])
+    post = board_repository.getpost(post_id)
+    result = post['owner_id'] == str(post_user_set["logined_id"])
+    if result is True:
+        return True
+    else:
+        return False
