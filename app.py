@@ -132,12 +132,12 @@ def api_get_a_post():
 @app.route('/board/write', methods=['POST'])
 def api_write_post_page():
     receive_token = request.cookies.get('access-token')
-    owner_id = security_service.getIdWithValidation(receive_token)
+    owner = security_service.getIdWithValidation(receive_token)
 
     post_receive = dict()
     params = request.get_json()
 
-    post_receive['owner_id'] = owner_id
+    post_receive['owner_id'] = owner['id']
     post_receive['category'] = params['category']
     post_receive['content'] = params['content']
     post_receive['location'] = params['location']
@@ -188,8 +188,9 @@ def api_delete_post():
 
 # ========================= reservation controller =========================
 
+#예약 신청(테스트 X)
 @app.route('/reservation/write', methods=['POST'])
-def api_get_a_resv():
+def api_write_a_resv():
     receive_token = request.cookies.get('access-token')
     user = security_service.validateToken(receive_token)
     user_id = user['_id']
@@ -210,6 +211,8 @@ def api_get_a_resv():
         return jsonify({'result': 'success', 'msg': '예약신청이 완료되었습니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
+    
+
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)
