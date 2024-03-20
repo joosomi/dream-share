@@ -49,3 +49,6 @@ def login(given_login_form):
         return security_service.issueToken(id_receive)
     else:
         return False
+    
+def find_user(user_id):
+    return user_repository.find_one_by_object_id(user_id)
