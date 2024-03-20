@@ -18,7 +18,7 @@ def render_home():
 def render_main():
 
     result = board_service.get_all_posts()
-    return render_template('testmain.html', posts = result)
+    return render_template('testmain.html',posts = result)
 
 @app.route('/user/login')
 def render_login():
@@ -35,6 +35,11 @@ def render_login():
 @app.route('/user/sign-up')
 def render_signup():
     return render_template('testsignup.html')
+
+@app.route('/reservation')
+def render_reservation():
+    post_id = request.args.get('post_id')
+    return render_template('reservation.html',post_id = post_id)
 
 
 # ========================= user controller =========================
@@ -195,14 +200,14 @@ def api_write_a_resv():
     user = security_service.getIdWithValidation(receive_token)
     user_id = user['id']
     found_user = user_service.find_user(user_id)
-    post_id= request.args.get('id')
     
     resv_receive = dict()
     params = request.get_json()
+    post_id= params['post_id']
 
     resv_receive['user_id'] = str(found_user['_id'])
     resv_receive['post_id'] = post_id
-    resv_receive['contact-information'] = params['contect_infomation']
+    resv_receive['contect-information'] = params['contect-information']
     resv_receive['status'] = 0
     resv_receive['user_name'] = found_user['username']
 

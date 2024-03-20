@@ -7,11 +7,15 @@ def get_all_posts():
     result = list()
     for post in posts:
         data = list()
+        post_out = list()
         data.append(post['category'])
         data.append(post['location'])
         data.append(post['content'])
         data.append(post['status'])
-        result.append(data)
+        post_out.append(data)
+        post_out.append(str(post['_id']))
+        result.append(post_out)
+
     if result is not None:
         return result
     else:
