@@ -1,6 +1,7 @@
 from user import user_service
 from board import board_service
 from security import security_service
+from reservation import reservation_service
 from flask import Flask, jsonify ,request, render_template, redirect, url_for
 from flask_cors import CORS
 
@@ -130,16 +131,17 @@ def api_get_a_post():
 #게시글 등록
 @app.route('/board/write', methods=['POST'])
 def api_write_post_page():
+    receive_token = request.cookies.get('access-token')
+    owner_id = security_service.getIdWithValidation(receive_token)
+
     post_receive = dict()
     params = request.get_json()
 
-    post_receive['owner_id'] = params['owner_id']
+    post_receive['owner_id'] = owner_id
     post_receive['category'] = params['category']
     post_receive['content'] = params['content']
     post_receive['location'] = params['location']
     post_receive['status'] = params['status']
-    post_receive['user_id'] = params['user_id']
-
 
     result = board_service.write_a_post(post_receive)
 
@@ -165,7 +167,33 @@ def api_delete_post():
         return jsonify({'result': 'success', 'msg': '게시글 삭제가 완료되었습니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
+    
 
+
+# ========================= reservation controller =========================
+
+@app.route('/reservation/write', methods=['POST'])
+def api_get_a_resv():
+    receive_token = request.cookies.get('access-token')
+    user = security_service.validateToken(receive_token)
+    user_id = user['_id']
+    post_id= request.args.get('id')
+    
+    resv_receive = dict()
+    params = request.get_json()
+
+    resv_receive['user_id'] = user_id
+    resv_receive['post_id'] = post_id
+    resv_receive['contect_infomation'] = params['contect_infomation']
+    resv_receive['status'] = params['status']
+
+
+    result = reservation_service.write_a_resv(resv_receive)
+
+    if result is True:
+        return jsonify({'result': 'success', 'msg': '예약신청이 완료되었습니다.'})
+    else:
+        return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)
