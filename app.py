@@ -19,7 +19,7 @@ def api_register():
     if result is True:
         return jsonify({'result': 'success', 'msg': '회원가입이 완료되었습니다.'})
     else:
-        return jsonify({'result': 'fail'})
+        return jsonify({'result': 'fail', 'msg': '중복을 확인해 주세요.'})
 
 @app.route('/user/username/validate', methods=['GET'])
 def validate_username():

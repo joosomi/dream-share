@@ -21,3 +21,9 @@ def login_check(login_form):
     id_receive = login_form['id_receive']
     pw_receive = login_form['pw_receive']
     return db.user.find_one({'user_id': id_receive, 'password': pw_receive})
+
+def find_one_by_id(id):
+    return db.user.find_one({'user_id': id})
+
+def find_one_by_name(name):
+    return db.user.find_one({'user_name': name})

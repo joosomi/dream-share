@@ -10,11 +10,15 @@ def sign_up(given_user):
     user['pw_receive'] = pw_hash
     user['username_receive'] = given_user['username_receive']
 
+    if user_repository.find_one_by_id(user['id_receive']):
+        return False
+    if user_repository.find_one_by_name(user['username_receive']):
+        return False
+    
     result = user_repository.register(user)
     if result is not None:
         return True
-    else: 
-        return False
+    return False
 
 def validateUsername(username):
     result = user_repository.usernameIsExist(username)
