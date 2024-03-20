@@ -188,29 +188,32 @@ def api_delete_post():
 
 # ========================= reservation controller =========================
 
-#예약 신청(테스트 X)
+#예약 신청
 @app.route('/reservation/write', methods=['POST'])
 def api_write_a_resv():
     receive_token = request.cookies.get('access-token')
     user = security_service.getIdWithValidation(receive_token)
+    user_id = user['id']
+    found_user = user_service.find_user(user_id)
     post_id= request.args.get('id')
     
     resv_receive = dict()
     params = request.get_json()
 
-    resv_receive['user_id'] = user['id']
+    resv_receive['user_id'] = str(found_user['_id'])
     resv_receive['post_id'] = post_id
     resv_receive['contact-information'] = params['contect_infomation']
     resv_receive['status'] = 0
+    resv_receive['user_name'] = found_user['username']
 
     result = reservation_service.write_a_resv(resv_receive)
 
     if result is True:
         board_service.change_status_to_1(post_id)
-        return jsonify({'result': 'success', 'msg': '예약신청이 완료되었습니다.'})
+        return jsonify({'x': 'success', 'msg': '예약신청이 완료되었습니다.'})
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
-    
+# 예약 조회
 @app.route('/reservation', methods=['GET'])
 def api_get_reservations():
     post_id= request.args.get('id')
@@ -218,9 +221,22 @@ def api_get_reservations():
     result = reservation_service.get_reservation_list(post_id)
 
     if result:
-        return jsonify({'msg': 'success', 'data': result})
+        return jsonify({'result': 'success', 'reservation': result})
     else:
-        return jsonify({'msg': '예약정보를 불러올 수 없습니다.'})
+        return jsonify({'result': 'fail', 'msg': '예약정보를 불러올 수 없습니다.'})
+
+
+#예약 선택
+@app.route('/reservation/select', methods=['GET'])
+def api_pick_reservations():
+    resv_id = request.args.get('id')
+    
+    result = reservation_service.pick_resv(resv_id)
+
+    if result:
+        return jsonify({'result': 'success', 'msg': "예약이 완료되였습니다"})
+    else:
+        return jsonify({'result': 'success', 'msg': '예약에 실패했습니다.'})
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)

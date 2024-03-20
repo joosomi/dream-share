@@ -27,3 +27,6 @@ def find_one_by_id(id):
 
 def find_one_by_name(name):
     return db.user.find_one({'user_name': name})
+
+def find_one_by_object_id(id):
+    return db.user.find_one({'_id': id})

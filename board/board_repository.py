@@ -34,3 +34,7 @@ def delete_post(post_id):
 def update_status_1(post_id):
     result = db.board.update_one({'_id' : post_id}, {'$set' : {'status' : '1'}})
     return
+
+def update_status_2(post_id):
+    result = db.board.update_one({'_id' : post_id}, {'$set' : {'status' : '2'}})
+    return
