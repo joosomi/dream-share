@@ -20,7 +20,7 @@ def getIdWithValidation(receive_token):
     try:
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
         userinfo = user_repository.find_one_by_id(payload['id'])
-        return {"result": True, "data": userinfo['_id']}
+        return {"result": True, "id": userinfo['_id']}
 
     except jwt.ExpiredSignatureError:
         return  {"result": False, "msg":"로그인 시간이 만료되었습니다."}
