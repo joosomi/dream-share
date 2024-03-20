@@ -211,6 +211,16 @@ def api_write_a_resv():
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
     
+@app.route('/reservation', methods=['GET'])
+def api_get_reservations():
+    post_id= request.args.get('id')
+    
+    result = reservation_service.get_reservation_list(post_id)
+
+    if result:
+        return jsonify({'msg': 'success', 'data': result})
+    else:
+        return jsonify({'msg': '예약정보를 불러올 수 없습니다.'})
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)
