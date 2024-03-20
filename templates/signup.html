@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <title>회원가입</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .wrap {
+            margin: auto;
+            width: 900px;
+        }
+
+        .title {
+            background-color: gainsboro;
+            padding: 20px 30px;
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        .posting-box {
+            margin: 10px auto 30px auto;
+            width: 500px;
+            border: 3px solid black;
+            border-radius: 5px;
+            padding: 25px;
+        }
+
+        .info #info__id {
+            position: relative;
+        }
+
+        #info__id button {
+            position: absolute;
+            width: 90px;
+            height: 40px;
+            top: 0;
+            bottom: 0;
+            right: 5px;
+            margin: auto 0;
+            border-radius: 3px;
+        }
+    </style>
+    <script>
+        function signup() {
+            $.ajax({
+                type: "POST",
+                url: "localhost:5000/api/signup",
+                data: {
+                    id_give: $('#input-id').val(),
+                    pw_give: $('#input-password').val(),
+                    nickname_give: $('#input-nickname').val()
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+
+        function id_overlap_check() {
+
+            $('.username_input').change(function () {
+                $('#id_check_sucess').hide();
+                $('.id_overlap_button').show();
+                $('.username_input').attr("check_result", "fail");
+            })
+
+
+            if ($('.username_input').val() == '') {
+                alert('아이디가 중복됩니다')
+                return;
+            }
+
+            id_overlap_input = document.querySelector('input[name="username"]');
+
+            $.ajax({
+                url: "{% url 'lawyerAccount:id_overlap_check' %}",
+                data: {
+                    'username': id_overlap_input.value
+                },
+                datatype: 'json',
+                success: function (data) {
+                    console.log(data['overlap']);
+                    if (data['overlap'] == "fail") {
+                        alert("이미 존재하는 아이디 입니다.");
+                        id_overlap_input.focus();
+                        return;
+                    } else {
+                        alert("사용가능한 아이디 입니다.");
+                        $('.username_input').attr("check_result", "success");
+                        $('#id_check_sucess').show();
+                        $('.id_overlap_button').hide();
+                        return;
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="title">
+            <h1 class="display-4">회원가입</h1>
+            <hr class="my-4">
+            <div class="posting-box" id="post-box">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="text" class="form-control" aria-describedby="emailHelp" id="input-id"
+                        placeholder="아이디 입력(6~20자)">
+                    <p></p>
+                    <button type="submit" onclick="signup()" class="btn btn-primary">중복 확인</button>
+                </div>
+                <div class="form-group">
+                    <label>닉네임</label>
+                    <input type="text" class="form-control" aria-describedby="emailHelp" id="input-nickname"
+                        placeholder="닉네임 입력(특수문자 제외 2~20자)">
+                    <p></p>
+                    <button type="submit" onclick="signup()" class="btn btn-primary">중복 확인</button>
+                </div>
+                <div class="form-group">
+                    <label>비밀번호</label>
+                    <input type="password" class="form-control" aria-describedby="emailHelp" id="input-password"
+                        placeholder="비밀번호 입력(대소문자, 숫자, 특수문자 포함 8~15자)">
+                </div>
+                <div class="form-group">
+                    <label>비밀번호 확인</label>
+                    <input type="password" class="form-control" aria-describedby="emailHelp" id="input-password"
+                        placeholder="비밀번호 재입력">
+                </div>
+                <button type="submit" onclick="signup()" class="btn btn-primary">이전으로</button>
+                <button type="submit" onclick="signup()" class="btn btn-primary">가입하기</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
