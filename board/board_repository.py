@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@3.36.87.209', 27017)
 db = client.dbdreamshare
 
 #전체 게시글 가져오기

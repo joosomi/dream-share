@@ -65,13 +65,13 @@
             }
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:5001/user/sign-up",
+                url: "/user/sign-up",
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=utf-8',
                 success: function (response) {
                     if (response['result'] == 'success') {
                         alert('회원가입이 완료되었습니다.');
-                        window.location.href = '/login';
+                        window.location.href = '/user/login';
                     } else {
                         alert(response['msg']);
                     }
@@ -90,7 +90,7 @@
             // 서버에 닉네임 중복 확인 요청 보내기
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:5001/user/username/validate",
+                url: "/user/username/validate",
                 data: { username: username },
                 success: function (response) {
                     alert(response['msg']);
@@ -115,7 +115,7 @@
             // 서버에 아이디 중복 확인 요청 보내기
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:5001/user/userid/validate",
+                url: "/user/userid/validate",
                 data: { user_id: id },
                 success: function (response) {
                     alert(response['msg']);
