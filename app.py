@@ -41,6 +41,25 @@ def render_reservation():
     post_id = request.args.get('post_id')
     return render_template('reservation.html',post_id = post_id)
 
+@app.route('/reservation-list', methods=['GET'])
+def render_reservation_view():
+    post_id= request.args.get('id')
+    receive_token = request.cookies.get('access-token') 
+    logined_id = security_service.getIdWithValidation(receive_token)
+    post_user_set = dict()
+
+    post_user_set['post_id'] = post_id
+    post_user_set['logined_id'] = logined_id['id']
+    is_authorized = security_service.is_authorized(post_user_set)
+    if is_authorized is False:
+        return jsonify({'result': 'fail', 'msg': '예약정보는 글 작성자만 볼 수 있습니다.'})
+
+    result = reservation_service.get_reservation_list(post_id)
+
+    if result :
+        return render_template('mypage.html',resvs = result)
+    else:
+        return jsonify({'result': 'fail', 'msg': '예약정보를 불러올 수 없습니다.'})
 
 # ========================= user controller =========================
 
@@ -84,7 +103,6 @@ def validate_userid():
         return jsonify({'result': 'fail', 'msg': '이미 존재하는 아이디입니다.'})
 
 
-# 로그인
 @app.route('/user/login', methods=['POST'])
 def login():
     user = dict()
@@ -220,27 +238,6 @@ def api_write_a_resv():
     else:
         return jsonify({'result': 'fail', 'msg': '다시 시도해주세요.'})
 
-# 예약 조회
-@app.route('/reservation', methods=['GET'])
-def api_get_reservations():
-    post_id= request.args.get('id')
-    receive_token = request.cookies.get('access-token') 
-    logined_id = security_service.getIdWithValidation(receive_token)
-    post_user_set = dict()
-
-    post_user_set['post_id'] = post_id
-    post_user_set['logined_id'] = logined_id['id']
-    is_authorized = security_service.is_authorized(post_user_set)
-    if is_authorized is False:
-        return jsonify({'result': 'fail', 'msg': '예약정보는 글 작성자만 볼 수 있습니다.'})
-
-    result = reservation_service.get_reservation_list(post_id)
-
-    if result :
-        return jsonify({'result': 'success', 'reservation': result})
-    else:
-        return jsonify({'result': 'fail', 'msg': '예약정보를 불러올 수 없습니다.'})
-
 
 #예약 선택
 @app.route('/reservation/select', methods=['GET'])
@@ -250,9 +247,9 @@ def api_pick_reservations():
     result = reservation_service.pick_resv(resv_id)
 
     if result:
-        return jsonify({'result': 'success', 'msg': "예약이 완료되였습니다"})
+        return redirect(url_for('render_main'))
     else:
-        return jsonify({'result': 'success', 'msg': '예약에 실패했습니다.'})
+        return jsonify({'result': 'fail', 'msg': '예약에 실패했습니다.'})
 
 if __name__ == '__main__':  
     app.run('0.0.0.0',port=5001,debug=True)
